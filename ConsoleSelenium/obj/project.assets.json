@@ -1,11 +1,78 @@
 {
   "version": 4,
   "targets": {
-    "net10.0": {}
+    "net10.0": {
+      "Selenium.WebDriver/4.52.0": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/Selenium.WebDriver.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Selenium.WebDriver.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/Selenium.WebDriver.props": {}
+        },
+        "runtimeTargets": {
+          "runtimes/linux-arm64/native/selenium-manager": {
+            "assetType": "native",
+            "rid": "linux-arm64"
+          },
+          "runtimes/linux-x64/native/selenium-manager": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/osx/native/selenium-manager": {
+            "assetType": "native",
+            "rid": "osx"
+          },
+          "runtimes/win/native/selenium-manager.exe": {
+            "assetType": "native",
+            "rid": "win"
+          }
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "Selenium.WebDriver/4.52.0": {
+      "sha512": "ISAxyCkxAQ1pvJ9/9619q4DTdvuW4zaJydxoSqNFS7Db8JytgilbJXYHg7xwpGXXjNwXSx/07hqaKwL0Unf+pg==",
+      "type": "package",
+      "path": "selenium.webdriver/4.52.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "NOTICE",
+        "README.md",
+        "build/Selenium.WebDriver.props",
+        "buildTransitive/Selenium.WebDriver.props",
+        "icon.png",
+        "lib/net462/Selenium.WebDriver.dll",
+        "lib/net462/Selenium.WebDriver.xml",
+        "lib/net8.0/Selenium.WebDriver.dll",
+        "lib/net8.0/Selenium.WebDriver.xml",
+        "lib/netstandard2.0/Selenium.WebDriver.dll",
+        "lib/netstandard2.0/Selenium.WebDriver.xml",
+        "runtimes/linux-arm64/native/selenium-manager",
+        "runtimes/linux-x64/native/selenium-manager",
+        "runtimes/osx/native/selenium-manager",
+        "runtimes/win/native/selenium-manager.exe",
+        "selenium-manager-THIRD-PARTY-NOTICES.txt",
+        "selenium-manager.cdx.json",
+        "selenium.webdriver.4.52.0.nupkg.sha512",
+        "selenium.webdriver.nuspec"
+      ]
+    }
+  },
   "projectFileDependencyGroups": {
-    "net10.0": []
+    "net10.0": [
+      "Selenium.WebDriver >= 4.52.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\aluno\\.nuget\\packages\\": {}
@@ -51,6 +118,12 @@
       "net10.0": {
         "framework": "net10.0",
         "targetAlias": "net10.0",
+        "dependencies": {
+          "Selenium.WebDriver": {
+            "target": "Package",
+            "version": "[4.52.0, )"
+          }
+        },
         "imports": [
           "net461",
           "net462",

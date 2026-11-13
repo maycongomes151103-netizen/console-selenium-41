@@ -12,4 +12,7 @@
   <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <SourceRoot Include="C:\Users\aluno\.nuget\packages\" />
   </ItemGroup>
+  <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <Import Project="$(NuGetPackageRoot)selenium.webdriver\4.52.0\buildTransitive\Selenium.WebDriver.props" Condition="Exists('$(NuGetPackageRoot)selenium.webdriver\4.52.0\buildTransitive\Selenium.WebDriver.props')" />
+  </ImportGroup>
 </Project>

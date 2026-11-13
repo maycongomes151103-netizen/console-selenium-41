@@ -1,1 +1,3 @@
-﻿Console.WriteLine("Hello, World!");
+﻿using ConsoleSelenium.Script;
+
+PrimeiroScript.Automatizar_Envio_Texto_ComSucesso();

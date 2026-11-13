@@ -8,111 +8,103 @@ namespace ConsoleSelenium.Tests
     [TestClass]
     public class WebFormularioDesafioTest
     {
-        private IWebDriver _driver;
+        private IWebDriver? _driver;
         private const string TargetUrl = "https://www.selenium.dev/selenium/web/web-form.html";
+        private IWebDriver Driver => _driver ?? throw new InvalidOperationException("Driver não foi inicializado.");
 
         [TestInitialize]
         public void Setup()
         {
-            // Configura o WebDriver do Chrome
             var options = new ChromeOptions();
-            // options.AddArgument("--headless"); // Descomente se quiser rodar em segundo plano
+            options.AddArgument("--start-maximized");
             _driver = new ChromeDriver(options);
-            _driver.Manage().Window.Maximize();
         }
 
         [TestCleanup]
         public void TearDown()
         {
-            _driver?.Quit();
-            _driver?.Dispose();
+            var driver = _driver;
+            _driver = null;
+
+            if (driver is null)
+            {
+                return;
+            }
+
+            try
+            {
+                driver.Quit();
+            }
+            finally
+            {
+                driver.Dispose();
+            }
+        }
+
+        private IWebElement WaitForSuccessMessage()
+        {
+            var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(10));
+            return wait.Until(driver =>
+            {
+                var message = driver.FindElement(By.Id("message"));
+                return message.Text == "Received!" ? message : null;
+            });
         }
 
         [TestMethod]
         public void Exercicio1_CenarioCadastroCompleto()
         {
-            // 1. Navegar até a URL
-            _driver.Navigate().GoToUrl(TargetUrl);
+            Driver.Navigate().GoToUrl(TargetUrl);
 
-            // 2. Preencher o campo Text input (my-text) com o nome completo
-            var textInput = _driver.FindElement(By.Name("my-text"));
-            textInput.SendKeys("Maycon Gomes");
+            Driver.FindElement(By.Name("my-text")).SendKeys("Maycon Gomes");
+            Driver.FindElement(By.Name("my-password")).SendKeys("SenhaSegura123!");
+            Driver.FindElement(By.Name("my-textarea")).SendKeys("Experiência com automação de testes usando C# e Selenium.");
 
-            // 3. Preencher o campo Password (my-password) com uma senha segura
-            var passwordInput = _driver.FindElement(By.Name("my-password"));
-            passwordInput.SendKeys("SenhaSegura123!");
+            var readonlyInput = Driver.FindElement(By.Name("my-readonly"));
+            Assert.AreEqual("Readonly input", readonlyInput.GetAttribute("value"));
 
-            // 4. Preencher o campo Textarea (my-textarea) com breve descrição
-            var textArea = _driver.FindElement(By.Name("my-textarea"));
-            textArea.SendKeys("Experiência sólida com automação de testes utilizando C#, Selenium WebDriver e xUnit/MSTest.");
-
-            // 5. Validar através de asserção que o input de leitura contém exatamente "Readonly input"
-            var readonlyInput = _driver.FindElement(By.Name("my-readonly"));
-            string readonlyValue = readonlyInput.GetAttribute("value");
-            Assert.AreEqual("Readonly input", readonlyValue);
-
-            // 6. Submeter o formulário e validar que a página de sucesso exibe "Received!"
-            var submitButton = _driver.FindElement(By.CssSelector("button[type='submit']"));
-            submitButton.Click();
-
-            var messageElement = _driver.FindElement(By.Id("message"));
+            Driver.FindElement(By.CssSelector("button[type='submit']")).Click();
+            var messageElement = WaitForSuccessMessage();
             Assert.AreEqual("Received!", messageElement.Text);
         }
 
         [TestMethod]
         public void Exercicio2_InteragindoComSeletoresEDropdowns()
         {
-            // 1. Navegar até a URL
-            _driver.Navigate().GoToUrl(TargetUrl);
+            Driver.Navigate().GoToUrl(TargetUrl);
 
-            // 2. Utilizar a classe SelectElement para selecionar a opção "Two" no Dropdown (my-select)
-            var selectElement = new SelectElement(_driver.FindElement(By.Name("my-select")));
+            var selectElement = new SelectElement(Driver.FindElement(By.Name("my-select")));
             selectElement.SelectByValue("2");
-
-            // 3. Validar se a opção selecionada de fato possui o valor 2
             Assert.AreEqual("Two", selectElement.SelectedOption.Text);
 
-            // 4. No campo de Dropdown (datalist) (my-datalist), enviar o texto correspondente (ex: "Seattle")
-            var dataListInput = _driver.FindElement(By.Name("my-datalist"));
-            dataListInput.SendKeys("Seattle");
+            Driver.FindElement(By.Name("my-datalist")).SendKeys("Seattle");
 
-            // 5. Acionar o envio do formulário e verificar se o fluxo ocorreu sem exceções
-            var submitButton = _driver.FindElement(By.CssSelector("button[type='submit']"));
-            submitButton.Click();
-
-            var messageElement = _driver.FindElement(By.Id("message"));
-            Assert.IsTrue(messageElement.Displayed);
+            Driver.FindElement(By.CssSelector("button[type='submit']")).Click();
+            var messageElement = WaitForSuccessMessage();
+            Assert.AreEqual("Received!", messageElement.Text);
         }
 
         [TestMethod]
         public void Exercicio3_ManipulacaoDeEstadosCheckboxesRadiosEColors()
         {
-            // 1. Navegar até a URL
-            _driver.Navigate().GoToUrl(TargetUrl);
+            Driver.Navigate().GoToUrl(TargetUrl);
 
-            // 2. Validar que o primeiro checkbox (my-check-1) já se encontra marcado (true) por padrão
-            var checkbox1 = _driver.FindElement(By.Id("my-check-1"));
+            var checkbox1 = Driver.FindElement(By.Id("my-check-1"));
             Assert.IsTrue(checkbox1.Selected);
 
-            // 3. Clicar no segundo checkbox (my-check-2) para marcá-lo
-            var checkbox2 = _driver.FindElement(By.Id("my-check-2"));
+            var checkbox2 = Driver.FindElement(By.Id("my-check-2"));
             checkbox2.Click();
             Assert.IsTrue(checkbox2.Selected);
 
-            // 4. Alternar a seleção para o rádio padrão (my-radio-2), garantindo que ele seja selecionado
-            var radio2 = _driver.FindElement(By.Id("my-radio-2"));
+            var radio2 = Driver.FindElement(By.Id("my-radio-2"));
             radio2.Click();
             Assert.IsTrue(radio2.Selected);
 
-            // 5. Interagir com o Color picker alterando o valor de cor do elemento
-            var colorPicker = _driver.FindElement(By.Name("my-colors"));
-            colorPicker.SendKeys("#ff0000"); // Define para vermelho
+            var colorPicker = Driver.FindElement(By.Name("my-colors"));
+            colorPicker.SendKeys("#ff0000");
 
-            // 6. Realizar o envio do formulário e validar o sucesso da operação
-            var submitButton = _driver.FindElement(By.CssSelector("button[type='submit']"));
-            submitButton.Click();
-
-            var messageElement = _driver.FindElement(By.Id("message"));
+            Driver.FindElement(By.CssSelector("button[type='submit']")).Click();
+            var messageElement = WaitForSuccessMessage();
             Assert.AreEqual("Received!", messageElement.Text);
         }
     }

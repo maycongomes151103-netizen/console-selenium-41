@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "3AQsxuuyDcc=",
+  "dgSpecHash": "RSQtEF6R5t4=",
   "success": true,
   "projectFilePath": "C:\\Users\\aluno\\Documents\\ConsoleSelenium41\\ConsoleSelenium\\ConsoleSelenium.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\aluno\\.nuget\\packages\\selenium.webdriver\\4.52.0\\selenium.webdriver.4.52.0.nupkg.sha512"
+  ],
   "logs": []
 }
